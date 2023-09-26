@@ -37,7 +37,7 @@ public class timeComplexity {
         int j = 0;
         int sum = 0;
         ArrayList<Integer> ans = new ArrayList<Integer>();
-        while(i<=j && i<arr.length && j < arr.length){
+        while(i<arr.length && j < arr.length){
             if(i==j && arr[j] == s){
                 ans.add(i+1);
                 ans.add(i+1);
@@ -46,8 +46,9 @@ public class timeComplexity {
                 sum += arr[j];
                 j++;
             }else if(sum+arr[j]>s){
-                if (i != 0) {
-                    sum-=arr[i];
+                sum-=arr[i];
+                if(sum<0){
+                    sum=0;
                 }
                 i++;
                 if(j<i){
