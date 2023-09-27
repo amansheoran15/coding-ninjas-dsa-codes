@@ -1,6 +1,7 @@
 package timecomplexity13;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class timeComplexity {
@@ -142,22 +143,104 @@ public class timeComplexity {
         System.out.println(num_pair);
     }
 
+    public static int[] twoSum(int[] arr, int target) {
+        int[] arr2 = new int[arr.length];
+        for(int i=0;i<arr.length;i++){
+            arr2[i] = arr[i];
+        }
+        Arrays.sort(arr2);
+        int i=0, j=arr2.length-1;
+        int[] ans = new int[2];
+        Arrays.fill(ans, Integer.MIN_VALUE);
+
+        int highInd=0,lowind=0;
+
+        while(i<j){
+            if(arr2[i]+arr2[j]<target){
+                i++;
+            }else if(arr2[i]+arr2[j]>target){
+                j--;
+            }else{
+                lowind = arr2[i];
+                highInd = arr2[j];
+                break;
+            }
+        }
+
+        System.out.println(ans[0] +" "+ ans[1]);
+
+        for(int l=0;l<arr.length;l++){
+//            System.out.println(arr[l]);
+            if(ans[0]== Integer.MIN_VALUE && arr[l]==lowind){
+                ans[0] = l;
+            }
+            else if(ans[1]== Integer.MIN_VALUE && arr[l]==highInd){
+                ans[1] = l;
+            }
+        }
+
+        return ans;
+    }
+
+    public static int removeDuplicates(int[] arr) {
+        int k = arr.length;
+        int dup_count=0;
+        for(int i = 0; i < k-1; i++){
+            dup_count=0;
+            while(i<k-1 && arr[i] == arr[i+1]){
+                dup_count++;
+                i++;
+            }
+
+            if(i<k-1 && arr[i]!=arr[i+1] && dup_count!=0){
+                for(int j = i+1; j < arr.length; j++){
+                    arr[j-dup_count] = arr[j];
+                }
+                k-=dup_count;
+                i-=dup_count+1;
+            }
+
+            if(i==k-1 && arr[i]==arr[i-1]){
+                k-=dup_count;
+            }
+        }
+        return k;
+    }
+
+    public static int removeDuplicatesBetter(int[] arr){
+        int i = 0;
+        for (int j = 0; j < arr.length; j++) {
+            if(arr[i]!=arr[j]){
+                arr[++i] = arr[j];
+            }
+        }
+        return ++i;
+    }
+
     public static void main(String[] args) {
-        int size;
-        System.out.println("Input size of the array: ");
-        Scanner s = new Scanner(System.in);
-        size = s.nextInt();
-        int[] arr = new int[size];
-        takeInput(arr);
+//        int size;
+//        System.out.println("Input size of the array: ");
+//        Scanner s = new Scanner(System.in);
+//        size = s.nextInt();
+//        int[] arr = new int[size];
+//        takeInput(arr);
 //        System.out.println(arr[544]);
 
 //        System.out.println(equilibriumIndex(arr));
 
 //        pairSum(arr,10);
 
-        ArrayList<Integer> ans = subarrayWithGivenSum(arr,2755);
-        for (int a:ans){
-            System.out.print(a +" ");
+//        ArrayList<Integer> ans = subarrayWithGivenSum(arr,2755);
+//        for (int a:ans){
+//            System.out.print(a +" ");
+//        }
+
+        int[] arr2 = {3,3,4,4,4,4,4};
+//        System.out.println(Arrays.toString(twoSum(arr2,-6)));
+
+        int len = removeDuplicatesBetter(arr2);
+        for (int i = 0; i < len; i++) {
+            System.out.print(arr2[i] + " ");
         }
     }
 }
