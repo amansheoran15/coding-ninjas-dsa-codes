@@ -2,6 +2,7 @@ package recursion17;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Recursion17Assignment {
@@ -88,6 +89,123 @@ public class Recursion17Assignment {
         return ans;
     }
 
+    public static void printSubsets(int[] arr,int startIndex, ArrayList<Integer> output){
+        if(startIndex>arr.length-1){
+            System.out.println(output.toString());
+            return;
+        }
+//        System.out.println(output.toString());
+        printSubsets(arr,startIndex+1,output);
+        ArrayList<Integer> newOut = new ArrayList<>(output);
+        newOut.add(arr[startIndex]);
+        printSubsets(arr,startIndex+1,newOut);
+    }
+
+    public static List<List<Integer>> returnSubsetSumK(int[] arr,int startIndex,int k){
+        if(startIndex>arr.length-1){
+            return new ArrayList<>(){};
+        }
+        if(arr[startIndex]==k){
+            List<List<Integer>> a = new ArrayList<>();
+            ArrayList<Integer> b= new ArrayList<>();
+            b.add(arr[startIndex]);
+            a.add(b);
+            return a;
+        }
+        List<List<Integer>> smallAns1 = returnSubsetSumK(arr,startIndex+1,k);
+        List<List<Integer>> smallAns2 = returnSubsetSumK(arr,startIndex+1,k-arr[startIndex]);
+
+        if(!smallAns2.isEmpty()){
+            for(List<Integer> subset : smallAns2){
+                subset.add(arr[startIndex]);
+            }
+        }
+
+        List<List<Integer>> ans = new ArrayList<>(smallAns1);
+        ans.addAll(smallAns2);
+        return ans;
+    }
+
+    public static List<List<Integer>> returnSubsetSumK(int[] arr,int k){
+        List<List<Integer>> ans = returnSubsetSumK(arr,0,k);
+        for(List<Integer> subset: ans){
+            Collections.reverse(subset);
+        }
+        return ans;
+    }
+
+
+    public static void printSubsetSumK(int[] arr ,int startIndex,int k, ArrayList<Integer> output){
+        if(startIndex>arr.length-1){
+            int sum=0;
+            for(int i:output){
+                sum+=i;
+            }
+            if(sum==k){
+                System.out.println(output.toString());
+            }
+            return;
+        }
+        printSubsetSumK(arr,startIndex+1,k,output);
+        ArrayList<Integer> newOut = new ArrayList<>(output);
+        newOut.add(arr[startIndex]);
+        printSubsetSumK(arr,startIndex+1,k,newOut);
+    }
+
+    public static void printSubsetSumK2(int[] arr , int startIndex, int k, ArrayList<Integer> output){
+        if(startIndex>arr.length-1){
+            if(k==0){
+                System.out.println(output.toString());
+            }
+            return;
+        }
+        printSubsetSumK2(arr,startIndex+1,k,output);
+        ArrayList<Integer> newOut = new ArrayList<>(output);
+        newOut.add(arr[startIndex]);
+        printSubsetSumK2(arr,startIndex+1,k-arr[startIndex],newOut);
+    }
+
+    public static String[] returnCodes(int num){
+        if(num==0){
+            String[] s = {""};
+            return s;
+        }
+
+        String[] smallAns1 = returnCodes(num/10);
+        String[] smallAns2 = returnCodes(num/100);
+        char code1 = (char)(num%10 + 'a' - 1);
+        System.out.println(code1);
+        char code2 = ' ';
+        boolean code2Check = false;
+        if(num/10 !=0 && num%100 < 27){
+            code2 = (char) (num%100 + 'a' - 1);
+            code2Check = true;
+        }
+        System.out.println(code2);
+        for(int i=0; i<smallAns1.length; i++){
+            smallAns1[i] = smallAns1[i] + code1;
+        }
+        if(code2Check){
+            for(int i=0; i<smallAns2.length; i++){
+                smallAns2[i] = smallAns2[i] + code2;
+            }
+        }
+        int len = code2Check?smallAns1.length + smallAns2.length:smallAns1.length;
+        String[] ans = new String[len];
+        int k = 0;
+        for(String s:smallAns1){
+            ans[k++] = s;
+        }
+        if(code2Check){
+            for(String s:smallAns2){
+                ans[k++] = s;
+            }
+        }
+        return ans;
+    }
+
+
+
     public static void main(String[] args) {
 //        System.out.println(checkAB("abbabbabbabbaaaa"));
 
@@ -96,8 +214,15 @@ public class Recursion17Assignment {
 //        int arr[] = {1,10,9,8,100,65,34};
 //        System.out.println(binarySearch(arr,65,0,arr.length-1));
 
-        int[] arr2 = {15,20,12};
-        List<List<Integer>> ans = returnSubsets(arr2,0, arr2.length-1);
-        System.out.println(ans.toString());
+        int[] arr2 = {1,2,5,3,7};
+//        List<List<Integer>> ans = returnSubsets(arr2,0, arr2.length-1);
+//        System.out.println(ans.toString());
+        ArrayList<Integer> ans = new ArrayList<>();
+//        printSubsets(arr2,0,ans);
+
+//        System.out.println(returnSubsetSumK(arr2,8));
+//        printSubsetSumK2(arr2,0,8,ans);
+
+        System.out.println(Arrays.toString(returnCodes(523)));
     }
 }
