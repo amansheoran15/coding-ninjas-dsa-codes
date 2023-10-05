@@ -174,14 +174,12 @@ public class Recursion17Assignment {
         String[] smallAns1 = returnCodes(num/10);
         String[] smallAns2 = returnCodes(num/100);
         char code1 = (char)(num%10 + 'a' - 1);
-        System.out.println(code1);
         char code2 = ' ';
         boolean code2Check = false;
         if(num/10 !=0 && num%100 < 27){
             code2 = (char) (num%100 + 'a' - 1);
             code2Check = true;
         }
-        System.out.println(code2);
         for(int i=0; i<smallAns1.length; i++){
             smallAns1[i] = smallAns1[i] + code1;
         }
@@ -204,6 +202,49 @@ public class Recursion17Assignment {
         return ans;
     }
 
+    public static void printCodes(int num, String output){
+        if(num==0){
+            System.out.println(output);
+            return;
+        }
+
+        printCodes(num/10,((char)(num%10 + 'a' - 1)) + output);
+        if(num/10!=0 && num%100 <= 26){
+            printCodes(num/100,((char)(num%100 + 'a' - 1)) + output);
+        }
+    }
+
+    public static String[] returnPermutations(String str){
+        if(str.length() == 1){
+            String[] s = {str};
+            return s;
+        }
+
+        String[] smallAns = returnPermutations(str.substring(1));
+        String[] ans = new String[str.length()*smallAns.length];
+        int k = 0;
+        for(String s: smallAns){
+            String dup;
+            for (int i = 0; i <= s.length(); i++) {
+                dup = s.substring(0,i) + str.charAt(0) + s.substring(i);
+                ans[k++] = dup;
+            }
+        }
+
+        return ans;
+    }
+
+    public static void printPermutations(String str, String output){
+        if(str.isEmpty()){
+            System.out.println(output);
+            return;
+        }
+
+        for (int i = 0; i <= output.length(); i++) {
+            printPermutations(str.substring(1),output.substring(0,i)+str.charAt(0)+output.substring(i));
+        }
+    }
+
 
 
     public static void main(String[] args) {
@@ -223,6 +264,10 @@ public class Recursion17Assignment {
 //        System.out.println(returnSubsetSumK(arr2,8));
 //        printSubsetSumK2(arr2,0,8,ans);
 
-        System.out.println(Arrays.toString(returnCodes(523)));
+//        System.out.println(Arrays.toString(returnCodes(1)));
+//        printCodes(1,"");
+
+        System.out.println(Arrays.toString(returnPermutations("abc")));
+        printPermutations("abc","");
     }
 }
